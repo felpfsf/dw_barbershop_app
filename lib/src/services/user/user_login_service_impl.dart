@@ -6,12 +6,12 @@ import 'package:dw_barbershop/src/core/fp/nil.dart';
 import 'package:dw_barbershop/src/repositories/user/user_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import './user_services.dart';
+import './user_login_service.dart';
 
-class UserServicesImpl implements UserServices {
+class UserLoginServiceImpl implements UserLoginService {
   final UserRepository userRepository;
 
-  UserServicesImpl({required this.userRepository});
+  UserLoginServiceImpl({required this.userRepository});
   @override
   Future<Either<ServiceException, Nil>> execute(
       String email, String password) async {
