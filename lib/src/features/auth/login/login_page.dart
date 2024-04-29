@@ -1,4 +1,5 @@
 import 'package:dw_barbershop/src/core/ui/barbershop_theme.dart';
+import 'package:dw_barbershop/src/core/ui/constants.dart';
 import 'package:dw_barbershop/src/core/ui/helpers/helper_form.dart';
 import 'package:dw_barbershop/src/core/ui/helpers/messages.dart';
 import 'package:dw_barbershop/src/features/auth/login/login_state.dart';
@@ -84,7 +85,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         child: DecoratedBox(
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/background_image_chair.jpg'),
+              image: AssetImage(Assets.bgChairImage),
               opacity: 0.2,
               fit: BoxFit.cover,
             ),
