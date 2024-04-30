@@ -43,7 +43,7 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<Either<RepositoryException, UserModel>> me() async {
     try {
-      final Response(:data) = await restClient.auth.get('path');
+      final Response(:data) = await restClient.auth.get('/me');
 
       return Right(UserModel.fromMap(data));
     } on DioException catch (e, s) {
