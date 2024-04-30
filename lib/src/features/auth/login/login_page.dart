@@ -49,10 +49,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
         case LoginState(status: LoginStateStatus.admLogin):
           // redirect user
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil('/home/adm', (route) => false);
           break;
 
         case LoginState(status: LoginStateStatus.employeeLogin):
           // redirect user
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil('/home/employee', (route) => false);
           break;
       }
     });
