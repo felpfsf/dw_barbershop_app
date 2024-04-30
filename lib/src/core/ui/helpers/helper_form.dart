@@ -5,5 +5,5 @@ void unfocus(BuildContext context) {
 }
 // Ou dessa forma então ele pode ser invocado a partir do context diretamente 
 extension UnFocusExtension on BuildContext {
-  void unfocus() => Focus.of(this).unfocus();
+  void unfocus() => FocusScope.of(this).unfocus();
 }

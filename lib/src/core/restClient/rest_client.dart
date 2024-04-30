@@ -6,17 +6,14 @@ final class RestClient extends DioForNative {
   RestClient()
       : super(
           BaseOptions(
-            baseUrl: 'http://192.168.15.40:8080',
+            baseUrl: 'http://192.168.15.54:8080',
             connectTimeout: const Duration(seconds: 10),
             receiveTimeout: const Duration(seconds: 60),
           ),
         ) {
     interceptors.addAll(
       [
-        LogInterceptor(
-          requestBody: true,
-          responseBody: true,
-        ),
+        LogInterceptor(requestBody: true, responseBody: true),
         AuthInterceptor(),
       ],
     );
