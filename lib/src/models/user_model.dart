@@ -27,6 +27,14 @@ class UserModel {
     required this.email,
     this.avatar,
   });
+
+  factory UserModel.fromMap(Map<String, dynamic> json) {
+    return switch (json['profile']) {
+      'ADM' => UserModelADM.fromMap(json),
+      'EMPLOYEE' => UserModelEmployee.fromMap(json),
+      _ => throw ArgumentError('Perfil de usuário não encontrado')
+    };
+  }
 }
 
 class UserModelADM extends UserModel {
