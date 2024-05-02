@@ -5,9 +5,13 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "dw_barbershop_app",
+      "name": "dw_barbershop_app DEV",
       "request": "launch",
-      "type": "dart"
+      "type": "dart",
+      "args": [
+        "--dart-define-from-file",
+        ".config/env.json"
+      ]
     },
     {
       "name": "dw_barbershop_app (profile mode)",

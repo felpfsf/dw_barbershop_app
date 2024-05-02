@@ -1,3 +1,4 @@
+import 'package:dw_barbershop/src/core/env.dart';
 import 'package:dw_barbershop/src/core/fp/either.dart';
 import 'package:dw_barbershop/src/core/restClient/rest_client.dart';
 import 'package:dw_barbershop/src/models/barbershop_model.dart';
@@ -13,7 +14,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'application_providers.g.dart';
 
 @Riverpod(keepAlive: true)
-RestClient restClient(RestClientRef ref) => RestClient();
+RestClient restClient(RestClientRef ref) => RestClient(Env.backendBaseUrl);
 
 @Riverpod(keepAlive: true)
 UserRepository userRepository(UserRepositoryRef ref) =>

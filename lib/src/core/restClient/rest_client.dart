@@ -3,10 +3,10 @@ import 'package:dio/io.dart';
 import 'package:dw_barbershop/src/core/restClient/interceptors/auth_interceptor.dart';
 
 final class RestClient extends DioForNative {
-  RestClient()
+  RestClient(String baseUrl)
       : super(
           BaseOptions(
-            baseUrl: 'http://192.168.15.54:8080',
+            baseUrl: baseUrl,
             connectTimeout: const Duration(seconds: 10),
             receiveTimeout: const Duration(seconds: 60),
           ),
