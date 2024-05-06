@@ -18,11 +18,14 @@ class BarbershopWeekdaysGrid extends StatelessWidget {
         const SizedBox(height: 16),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              for (var weekday in weekdays) WeekdayButton(weekday: weekday),
-            ],
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * .85,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                for (var weekday in weekdays) WeekdayButton(weekday: weekday),
+              ],
+            ),
           ),
         )
       ],
