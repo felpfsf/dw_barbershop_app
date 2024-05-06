@@ -137,5 +137,11 @@ sealed class BarbershopTheme {
     fontSize: 12,
   );
 
+  static const smallWidgetBoxSyle = TextStyle(
+    color: ColorsTheme.grey,
+    fontWeight: FontWeight.w500,
+    fontSize: 12,
+  );
+
   // #endregion
 }
