@@ -3,7 +3,7 @@ import 'package:dw_barbershop/src/core/ui/barbershop_nav_global_key.dart';
 import 'package:dw_barbershop/src/core/ui/barbershop_theme.dart';
 import 'package:dw_barbershop/src/core/ui/widgets/barbershop_loader.dart';
 import 'package:dw_barbershop/src/features/auth/login/login_page.dart';
-import 'package:dw_barbershop/src/features/register/user/user_register_page.dart';
+import 'package:dw_barbershop/src/features/register/user_register_page.dart';
 import 'package:dw_barbershop/src/features/splash/splash_page.dart';
 import 'package:flutter/material.dart';
 
