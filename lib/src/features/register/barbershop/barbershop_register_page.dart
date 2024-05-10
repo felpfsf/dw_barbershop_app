@@ -61,12 +61,19 @@ class _BarbershopRegisterPageState extends State<BarbershopRegisterPage> {
                 ),
               ),
               const SizedBox(height: 24),
-              const BarbershopWeekdaysGrid(),
+              BarbershopWeekdaysGrid(
+                onDayPressed: (value) {
+                  debugPrint(value);
+                },
+              ),
               const SizedBox(height: 24),
               // const SizedBox(height: 178, child: Placeholder()),
-              const BarbershopHoursGrid(
+              BarbershopHoursGrid(
                 startTime: 6,
                 endTime: 23,
+                onHourPressed: (value) {
+                  debugPrint('$value');
+                },
               ),
               const SizedBox(height: 24),
               ElevatedButton(

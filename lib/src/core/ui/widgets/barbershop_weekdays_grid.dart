@@ -4,7 +4,12 @@ import 'package:flutter/material.dart';
 List<String> weekdays = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'];
 
 class BarbershopWeekdaysGrid extends StatelessWidget {
-  const BarbershopWeekdaysGrid({super.key});
+  const BarbershopWeekdaysGrid({
+    super.key,
+    required this.onDayPressed,
+  });
+
+  final ValueChanged<String> onDayPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +26,11 @@ class BarbershopWeekdaysGrid extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              for (var weekday in weekdays) WeekdayButton(weekday: weekday),
+              for (var weekday in weekdays)
+                WeekdayButton(
+                  weekday: weekday,
+                  onDayPressed: onDayPressed,
+                ),
             ],
           ),
         )
@@ -30,20 +39,38 @@ class BarbershopWeekdaysGrid extends StatelessWidget {
   }
 }
 
-class WeekdayButton extends StatelessWidget {
+class WeekdayButton extends StatefulWidget {
   const WeekdayButton({
     super.key,
     required this.weekday,
+    required this.onDayPressed,
   });
 
   final String weekday;
+  final ValueChanged<String> onDayPressed;
+
+  @override
+  State<WeekdayButton> createState() => _WeekdayButtonState();
+}
+
+class _WeekdayButtonState extends State<WeekdayButton> {
+  var selected = false;
 
   @override
   Widget build(BuildContext context) {
+    final textColor = selected ? Colors.white : ColorsTheme.grey;
+    var buttonBgColor = selected ? ColorsTheme.brown : Colors.white;
+    var buttonBorderColor = selected ? ColorsTheme.brown : ColorsTheme.grey;
+
     return Padding(
       padding: const EdgeInsets.all(3.0),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          widget.onDayPressed(widget.weekday);
+          setState(() {
+            selected = !selected;
+          });
+        },
         borderRadius: BorderRadius.circular(8),
         child: Container(
           width: 40,
@@ -51,15 +78,17 @@ class WeekdayButton extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: ColorsTheme.grey,
+              color: buttonBorderColor,
             ),
-            color: Colors.white,
+            color: buttonBgColor,
           ),
           child: Align(
             alignment: Alignment.center,
             child: Text(
-              weekday,
-              style: BarbershopTheme.smallWidgetBoxSyle,
+              widget.weekday,
+              style: BarbershopTheme.smallWidgetBoxSyle.copyWith(
+                color: textColor,
+              ),
             ),
           ),
         ),
