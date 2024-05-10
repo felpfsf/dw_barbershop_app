@@ -1,4 +1,5 @@
 import 'package:dw_barbershop/src/core/ui/helpers/helper_form.dart';
+import 'package:dw_barbershop/src/core/ui/widgets/barbershop_hours_grid.dart';
 import 'package:dw_barbershop/src/core/ui/widgets/barbershop_weekdays_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:validatorless/validatorless.dart';
@@ -29,7 +30,7 @@ class _BarbershopRegisterPageState extends State<BarbershopRegisterPage> {
         title: const Text('Cadastrar estabelecimento'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,7 +63,11 @@ class _BarbershopRegisterPageState extends State<BarbershopRegisterPage> {
               const SizedBox(height: 24),
               const BarbershopWeekdaysGrid(),
               const SizedBox(height: 24),
-              const SizedBox(height: 178, child: Placeholder()),
+              // const SizedBox(height: 178, child: Placeholder()),
+              const BarbershopHoursGrid(
+                startTime: 6,
+                endTime: 23,
+              ),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () {},

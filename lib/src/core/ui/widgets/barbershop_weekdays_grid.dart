@@ -18,14 +18,11 @@ class BarbershopWeekdaysGrid extends StatelessWidget {
         const SizedBox(height: 16),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * .85,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                for (var weekday in weekdays) WeekdayButton(weekday: weekday),
-              ],
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              for (var weekday in weekdays) WeekdayButton(weekday: weekday),
+            ],
           ),
         )
       ],
@@ -43,21 +40,28 @@ class WeekdayButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 40,
-      height: 56,
-      decoration: BoxDecoration(
+    return Padding(
+      padding: const EdgeInsets.all(3.0),
+      child: InkWell(
+        onTap: () {},
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: ColorsTheme.grey,
-        ),
-        color: Colors.white,
-      ),
-      child: Align(
-        alignment: Alignment.center,
-        child: Text(
-          weekday,
-          style: BarbershopTheme.smallWidgetBoxSyle,
+        child: Container(
+          width: 40,
+          height: 56,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: ColorsTheme.grey,
+            ),
+            color: Colors.white,
+          ),
+          child: Align(
+            alignment: Alignment.center,
+            child: Text(
+              weekday,
+              style: BarbershopTheme.smallWidgetBoxSyle,
+            ),
+          ),
         ),
       ),
     );
