@@ -126,7 +126,7 @@ sealed class BarbershopTheme {
   );
 
   static const smallMdBodyStyle = TextStyle(
-    color: Colors.brown,
+    color: ColorsTheme.brown,
     fontWeight: FontWeight.w500,
     fontSize: 12,
   );
