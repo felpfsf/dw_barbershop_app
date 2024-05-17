@@ -3,6 +3,7 @@ import 'package:dw_barbershop/src/core/ui/barbershop_nav_global_key.dart';
 import 'package:dw_barbershop/src/core/ui/barbershop_theme.dart';
 import 'package:dw_barbershop/src/core/ui/widgets/barbershop_loader.dart';
 import 'package:dw_barbershop/src/features/auth/login/login_page.dart';
+import 'package:dw_barbershop/src/features/employee/register/employee_register_page.dart';
 import 'package:dw_barbershop/src/features/home/adm/home_adm_page.dart';
 import 'package:dw_barbershop/src/features/register/barbershop/barbershop_register_page.dart';
 import 'package:dw_barbershop/src/features/register/user/user_register_page.dart';
@@ -28,9 +29,7 @@ class BarbershopApp extends StatelessWidget {
             '/auth/register/user': (_) => const UserRegisterPage(),
             '/auth/register/barbershop': (_) => const BarbershopRegisterPage(),
             '/home/adm': (_) => const HomeAdmPage(),
-            '/home/employee': (_) => const Center(
-                  child: Text('EMPLOYEE'),
-                ),
+            '/employee/register': (_) => const EmployeeRegisterPage()
           },
         );
       },

@@ -113,6 +113,12 @@ sealed class BarbershopTheme {
     fontSize: 18,
   );
 
+  static const regularBodyStyle = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.w400,
+    fontSize: 14,
+  );
+
   static const mediumBodyStyle = TextStyle(
     color: Colors.black,
     fontWeight: FontWeight.w500,

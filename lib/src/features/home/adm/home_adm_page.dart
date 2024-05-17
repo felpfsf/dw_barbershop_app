@@ -46,9 +46,7 @@ class HomeAdmPage extends ConsumerWidget {
             ),
           );
         },
-        loading: () => const Center(
-          child: BarbershopLoader(),
-        ),
+        loading: () => const BarbershopLoader(),
       ),
     );
   }
@@ -62,7 +60,9 @@ class AddEmployeeFloatButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.of(context).pushNamed('/employee/register');
+      },
       shape: const CircleBorder(),
       backgroundColor: ColorsTheme.brown,
       child: const CircleAvatar(

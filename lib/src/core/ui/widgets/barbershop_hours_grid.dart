@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class BarbershopHoursGrid extends StatelessWidget {
   final int startTime;
   final int endTime;
+  final List<int>? enabledHours;
   final ValueChanged<int> onHourPressed;
 
   const BarbershopHoursGrid({
@@ -11,6 +12,7 @@ class BarbershopHoursGrid extends StatelessWidget {
     required this.startTime,
     required this.endTime,
     required this.onHourPressed,
+    this.enabledHours,
   });
 
   @override
@@ -32,6 +34,7 @@ class BarbershopHoursGrid extends StatelessWidget {
                 hour: '${i.toString().padLeft(2, '0')}:00',
                 value: i,
                 onHourPressed: onHourPressed,
+                enabledHours: enabledHours,
               ),
           ],
         ),
@@ -43,6 +46,7 @@ class BarbershopHoursGrid extends StatelessWidget {
 class HourButton extends StatefulWidget {
   final String hour;
   final int value;
+  final List<int>? enabledHours;
   final ValueChanged<int> onHourPressed;
 
   const HourButton({
@@ -50,6 +54,7 @@ class HourButton extends StatefulWidget {
     required this.hour,
     required this.value,
     required this.onHourPressed,
+    this.enabledHours,
   });
 
   @override
@@ -60,13 +65,20 @@ class _HourButtonState extends State<HourButton> {
   var selected = false;
   @override
   Widget build(BuildContext context) {
+    final HourButton(:enabledHours, :hour, :onHourPressed, :value) = widget;
     final textColor = selected ? Colors.white : ColorsTheme.grey;
     var buttonBgColor = selected ? ColorsTheme.brown : Colors.white;
     var buttonBorderColor = selected ? ColorsTheme.brown : ColorsTheme.grey;
 
+    final disabledHour = enabledHours != null && !enabledHours.contains(value);
+
+    if (disabledHour) {
+      buttonBgColor = Colors.grey[400]!;
+    }
+
     return InkWell(
       onTap: () {
-        widget.onHourPressed(widget.value);
+        disabledHour ? null : onHourPressed(widget.value);
         setState(() {
           selected = !selected;
         });
@@ -83,7 +95,7 @@ class _HourButtonState extends State<HourButton> {
         child: Align(
           alignment: Alignment.center,
           child: Text(
-            widget.hour,
+            hour,
             style: BarbershopTheme.smallWidgetBoxSyle.copyWith(
               color: textColor,
             ),

@@ -74,11 +74,7 @@ class HomeHeader extends ConsumerWidget {
                 ],
               );
             },
-            orElse: () {
-              return const Center(
-                child: BarbershopLoader(),
-              );
-            },
+            orElse: () => const BarbershopLoader(),
           ),
           const SizedBox(height: 24),
           Text(

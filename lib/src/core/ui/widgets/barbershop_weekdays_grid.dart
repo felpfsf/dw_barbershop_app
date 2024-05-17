@@ -7,9 +7,11 @@ class BarbershopWeekdaysGrid extends StatelessWidget {
   const BarbershopWeekdaysGrid({
     super.key,
     required this.onDayPressed,
+    this.enabledDays,
   });
 
   final ValueChanged<String> onDayPressed;
+  final List<String>? enabledDays;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,7 @@ class BarbershopWeekdaysGrid extends StatelessWidget {
                 WeekdayButton(
                   weekday: weekday,
                   onDayPressed: onDayPressed,
+                  enabledDays: enabledDays,
                 ),
             ],
           ),
@@ -44,10 +47,12 @@ class WeekdayButton extends StatefulWidget {
     super.key,
     required this.weekday,
     required this.onDayPressed,
+    this.enabledDays,
   });
 
   final String weekday;
   final ValueChanged<String> onDayPressed;
+  final List<String>? enabledDays;
 
   @override
   State<WeekdayButton> createState() => _WeekdayButtonState();
@@ -58,19 +63,29 @@ class _WeekdayButtonState extends State<WeekdayButton> {
 
   @override
   Widget build(BuildContext context) {
+    final WeekdayButton(:enabledDays, :weekday, :onDayPressed) = widget;
+
+    final disabledDay = enabledDays != null && !enabledDays.contains(weekday);
+
     final textColor = selected ? Colors.white : ColorsTheme.grey;
     var buttonBgColor = selected ? ColorsTheme.brown : Colors.white;
     var buttonBorderColor = selected ? ColorsTheme.brown : ColorsTheme.grey;
 
+    if (disabledDay) {
+      buttonBgColor = Colors.grey[400]!;
+    }
+
     return Padding(
       padding: const EdgeInsets.all(3.0),
       child: InkWell(
-        onTap: () {
-          widget.onDayPressed(widget.weekday);
-          setState(() {
-            selected = !selected;
-          });
-        },
+        onTap: disabledDay
+            ? null
+            : () {
+                onDayPressed(weekday);
+                setState(() {
+                  selected = !selected;
+                });
+              },
         borderRadius: BorderRadius.circular(8),
         child: Container(
           width: 40,
@@ -85,7 +100,7 @@ class _WeekdayButtonState extends State<WeekdayButton> {
           child: Align(
             alignment: Alignment.center,
             child: Text(
-              widget.weekday,
+              weekday,
               style: BarbershopTheme.smallWidgetBoxSyle.copyWith(
                 color: textColor,
               ),
