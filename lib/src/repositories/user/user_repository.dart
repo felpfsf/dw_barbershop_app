@@ -15,4 +15,7 @@ abstract interface class UserRepository {
     // Similar aos DTOs
     ({String name, String email, String password}) userDTO,
   );
+
+  Future<Either<RepositoryException, List<UserModel>>> getEmployees(
+      int barbershopId);
 }
