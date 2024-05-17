@@ -52,16 +52,17 @@ class HomeAdmPage extends ConsumerWidget {
   }
 }
 
-class AddEmployeeFloatButton extends StatelessWidget {
+class AddEmployeeFloatButton extends ConsumerWidget {
   const AddEmployeeFloatButton({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return FloatingActionButton(
-      onPressed: () {
-        Navigator.of(context).pushNamed('/employee/register');
+      onPressed: () async {
+        await Navigator.of(context).pushNamed('/employee/register');
+        ref.invalidate(homeAdmVmProvider);
       },
       shape: const CircleBorder(),
       backgroundColor: ColorsTheme.brown,

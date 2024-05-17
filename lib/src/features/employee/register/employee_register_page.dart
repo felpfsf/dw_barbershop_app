@@ -3,10 +3,12 @@ import 'dart:developer';
 import 'package:dw_barbershop/src/core/providers/application_providers.dart';
 import 'package:dw_barbershop/src/core/ui/barbershop_theme.dart';
 import 'package:dw_barbershop/src/core/ui/helpers/helper_form.dart';
+import 'package:dw_barbershop/src/core/ui/helpers/messages.dart';
 import 'package:dw_barbershop/src/core/ui/widgets/barbershop_hours_grid.dart';
 import 'package:dw_barbershop/src/core/ui/widgets/barbershop_loader.dart';
 import 'package:dw_barbershop/src/core/ui/widgets/barbershop_user_avatar.dart';
 import 'package:dw_barbershop/src/core/ui/widgets/barbershop_weekdays_grid.dart';
+import 'package:dw_barbershop/src/features/employee/register/employee_register_state.dart';
 import 'package:dw_barbershop/src/features/employee/register/employee_register_vm.dart';
 import 'package:dw_barbershop/src/models/barbershop_model.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +25,9 @@ class EmployeeRegisterPage extends ConsumerStatefulWidget {
 
 class _EmployeeRegisterPageState extends ConsumerState<EmployeeRegisterPage> {
   final formKey = GlobalKey<FormState>();
-  final nameEC = TextEditingController();
-  final emailEC = TextEditingController();
-  final passwordEC = TextEditingController();
+  final nameEC = TextEditingController(text: "Tester Employee 6");
+  final emailEC = TextEditingController(text: "employee06@barbershop.com.br");
+  final passwordEC = TextEditingController(text: "123123");
 
   bool registerAdm = false;
 
@@ -41,6 +43,19 @@ class _EmployeeRegisterPageState extends ConsumerState<EmployeeRegisterPage> {
   Widget build(BuildContext context) {
     final employeeRegisterVm = ref.watch(employeeRegisterVmProvider.notifier);
     final barbershopAsyncValue = ref.watch(getMyBarbershopProvider);
+
+    ref.listen(employeeRegisterVmProvider.select((state) => state.status),
+        (_, status) {
+      switch (status) {
+        case EmployeeRegisterStateStatus.initial:
+          break;
+        case EmployeeRegisterStateStatus.success:
+          Messages.showSuccess('Colaborador regitrado com sucesso', context);
+          Navigator.of(context).pop();
+        case EmployeeRegisterStateStatus.error:
+          Messages.showError('Erro ao registrar colaborador', context);
+      }
+    });
     return Scaffold(
         appBar: AppBar(
           title: const Text('Cadastrar colaborador'),
@@ -55,8 +70,10 @@ class _EmployeeRegisterPageState extends ConsumerState<EmployeeRegisterPage> {
           },
           loading: () => const BarbershopLoader(),
           data: (barbershopModel) {
-            final BarbershopModel(:openingDays, :openingHours) =
-                barbershopModel;
+            final BarbershopModel(
+              :openingDays,
+              :openingHours,
+            ) = barbershopModel;
             final List<int> sortedOpeningHours = openingHours.toList()..sort();
 
             return SingleChildScrollView(
@@ -149,7 +166,38 @@ class _EmployeeRegisterPageState extends ConsumerState<EmployeeRegisterPage> {
                     ),
                     const SizedBox(height: 24),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        switch (formKey.currentState?.validate()) {
+                          case false || null:
+                            Messages.showError(
+                              'Preencha todos os campos',
+                              context,
+                            );
+                          case true:
+                            final EmployeeRegisterState(
+                              workDays: List(isNotEmpty: hasWorkDays),
+                              workHours: List(isNotEmpty: hasWorkHours),
+                            ) = ref.watch(employeeRegisterVmProvider);
+
+                            if (!hasWorkDays || !hasWorkHours) {
+                              Messages.showError(
+                                'Selecione pelo menos um dia e hora de atendimento',
+                                context,
+                              );
+                              return;
+                            }
+
+                            final name = nameEC.text;
+                            final email = emailEC.text;
+                            final password = passwordEC.text;
+
+                            employeeRegisterVm.register(
+                              name,
+                              email,
+                              password,
+                            );
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(56),
                       ),
