@@ -6,11 +6,13 @@ import 'package:table_calendar/table_calendar.dart';
 class ScheduleCalendar extends StatefulWidget {
   final VoidCallback cancelPressed;
   final ValueChanged<DateTime> okPressed;
+  final List<String> workDays;
 
   const ScheduleCalendar({
     super.key,
     required this.cancelPressed,
     required this.okPressed,
+    required this.workDays,
   });
 
   @override
@@ -20,6 +22,26 @@ class ScheduleCalendar extends StatefulWidget {
 class _ScheduleCalendarState extends State<ScheduleCalendar> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
+  late final List<int> weekDaysEnabled;
+
+  int convertWeekDay(String day) {
+    return switch (day.toLowerCase()) {
+      'seg' => DateTime.monday,
+      'ter' => DateTime.tuesday,
+      'qua' => DateTime.wednesday,
+      'qui' => DateTime.thursday,
+      'sex' => DateTime.friday,
+      'sab' => DateTime.saturday,
+      'dom' => DateTime.sunday,
+      _ => 0,
+    };
+  }
+
+  @override
+  void initState() {
+    weekDaysEnabled = widget.workDays.map(convertWeekDay).toList();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +63,7 @@ class _ScheduleCalendarState extends State<ScheduleCalendar> {
             availableCalendarFormats: const {
               CalendarFormat.month: 'Month',
             },
+            enabledDayPredicate: (day) => weekDaysEnabled.contains(day.weekday),
             selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
             onDaySelected: (selectedDay, focusedDay) {
               if (!isSameDay(_selectedDay, selectedDay)) {

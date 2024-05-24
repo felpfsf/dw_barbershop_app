@@ -1,22 +1,28 @@
+import 'dart:developer';
+
 import 'package:dw_barbershop/src/core/ui/barbershop_icons.dart';
 import 'package:dw_barbershop/src/core/ui/barbershop_theme.dart';
 import 'package:dw_barbershop/src/core/ui/helpers/helper_form.dart';
 import 'package:dw_barbershop/src/core/ui/helpers/messages.dart';
 import 'package:dw_barbershop/src/core/ui/widgets/barbershop_hours_grid.dart';
 import 'package:dw_barbershop/src/core/ui/widgets/barbershop_user_avatar.dart';
+import 'package:dw_barbershop/src/features/employee/schedule/schedule_client_state.dart';
+import 'package:dw_barbershop/src/features/employee/schedule/schedule_client_vm.dart';
 import 'package:dw_barbershop/src/features/home/widgets/schedule_calendar.dart';
+import 'package:dw_barbershop/src/models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:validatorless/validatorless.dart';
 
-class ScheduleClientPage extends StatefulWidget {
+class ScheduleClientPage extends ConsumerStatefulWidget {
   const ScheduleClientPage({super.key});
 
   @override
-  State<ScheduleClientPage> createState() => _ScheduleClientPageState();
+  ConsumerState<ScheduleClientPage> createState() => _ScheduleClientPageState();
 }
 
-class _ScheduleClientPageState extends State<ScheduleClientPage> {
+class _ScheduleClientPageState extends ConsumerState<ScheduleClientPage> {
   var dateFormat = DateFormat('dd/MM/yyyy');
   bool showCalendar = false;
   final formKey = GlobalKey<FormState>();
@@ -32,6 +38,34 @@ class _ScheduleClientPageState extends State<ScheduleClientPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userModel = ModalRoute.of(context)!.settings.arguments as UserModel;
+    final scheduleVM = ref.watch(scheduleVmProvider.notifier);
+
+    final employeeData = switch (userModel) {
+      UserModelADM(:final workDays, :final workHours) => (
+          workDays: workDays!,
+          workHours: workHours!,
+        ),
+      UserModelEmployee(:final workDays, :final workHours) => (
+          workDays: workDays,
+          workHours: workHours,
+        ),
+      UserModel() => throw UnimplementedError(),
+    };
+
+    ref.listen(scheduleVmProvider.select((state) => state.status), (_, status) {
+      switch (status) {
+        case ScheduleStateStatus.initial:
+          break;
+        case ScheduleStateStatus.success:
+          Messages.showSuccess('Agendamento realizado com sucesso', context);
+          Navigator.of(context).pop();
+        case ScheduleStateStatus.error:
+          Messages.showError('Erro ao realizar agendamento', context);
+          log('❌ Erro ao realizar agendamento');
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Agendar cliente'),
@@ -44,9 +78,10 @@ class _ScheduleClientPageState extends State<ScheduleClientPage> {
               hideUploadButton: true,
             ),
             const SizedBox(height: 24),
-            const Text('Nome do colaborador'),
+            Text(userModel.name, style: BarbershopTheme.mediumTitleStyle),
             const SizedBox(height: 36),
             Form(
+              key: formKey,
               child: Column(
                 children: [
                   TextFormField(
@@ -96,9 +131,11 @@ class _ScheduleClientPageState extends State<ScheduleClientPage> {
                           okPressed: (DateTime value) {
                             setState(() {
                               dateSelectedEC.text = dateFormat.format(value);
+                              scheduleVM.dateSelected(value);
                               showCalendar = false;
                             });
                           },
+                          workDays: employeeData.workDays,
                         ),
                       ),
                     ],
@@ -106,9 +143,9 @@ class _ScheduleClientPageState extends State<ScheduleClientPage> {
                   const SizedBox(height: 24),
                   BarbershopHoursGrid.singleSelection(
                     startTime: 6,
-                    endTime: 22,
-                    enabledHours: const [6, 7, 8],
-                    onHourPressed: (value) {},
+                    endTime: 23,
+                    enabledHours: employeeData.workHours,
+                    onHourPressed: scheduleVM.hourSelected,
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton(
@@ -117,7 +154,16 @@ class _ScheduleClientPageState extends State<ScheduleClientPage> {
                         case null || false:
                           Messages.showError('Dados incompletos', context);
                         case true:
-                        // API
+                          // API
+                          final hourSelected = ref.watch(scheduleVmProvider
+                              .select((state) => state.scheduledHour != null));
+                          if (hourSelected) {
+                            scheduleVM.register(
+                                userModel: userModel, client: clientEC.text);
+                          } else {
+                            Messages.showError(
+                                'Por favor selecione um horário', context);
+                          }
                       }
                     },
                     style: ElevatedButton.styleFrom(
