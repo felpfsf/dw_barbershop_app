@@ -19,6 +19,7 @@ class EmployeeSchedulePage extends ConsumerStatefulWidget {
 }
 
 class _EmployeeSchedulePageState extends ConsumerState<EmployeeSchedulePage> {
+  bool ignoreFirstLoading = true;
   late DateTime _dateSelected;
 
   @override
@@ -92,13 +93,17 @@ class _EmployeeSchedulePageState extends ConsumerState<EmployeeSchedulePage> {
                     }
                   },
                   onViewChanged: (viewChangedDetails) {
+                    if (ignoreFirstLoading) {
+                      ignoreFirstLoading = false;
+                      return;
+                    }
                     final visibleDates = viewChangedDetails.visibleDates;
                     if (visibleDates.isNotEmpty) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        setState(() {
-                          _dateSelected = visibleDates.first;
-                        });
-                      });
+                      ref
+                          .read(
+                              employeeScheduleVmProvider(userId, _dateSelected)
+                                  .notifier)
+                          .changeDate(userId, visibleDates.first);
                     }
                   },
                   dataSource: AppointmentDataSource(schedules: schedules),
