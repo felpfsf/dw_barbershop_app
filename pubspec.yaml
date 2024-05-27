@@ -47,6 +47,9 @@ dependencies:
   top_snackbar_flutter: ^3.1.0
   table_calendar: ^3.0.9
   intl: ^0.18.1
+  syncfusion_flutter_calendar: 25.2.4
+  syncfusion_flutter_datepicker: 25.2.4
+  syncfusion_flutter_core: 25.2.4
 
 dev_dependencies:
   flutter_test:
