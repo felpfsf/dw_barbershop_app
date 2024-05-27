@@ -30,14 +30,28 @@ class BarbershopHoursGrid extends StatefulWidget {
 
 class _BarbershopHoursGridState extends State<BarbershopHoursGrid> {
   int? lastSelection;
+  List<int> selectedHours = [];
 
   void handleHourPressed(int hour) {
     setState(() {
+      // if (widget.singleSelection) {
+      //   if (lastSelection == hour) {
+      //     lastSelection = null;
+      //   } else {
+      //     lastSelection = hour;
+      //   }
+      // }
       if (widget.singleSelection) {
-        if (lastSelection == hour) {
-          lastSelection = null;
+        if (selectedHours.contains(hour)) {
+          selectedHours.remove(hour);
         } else {
-          lastSelection = hour;
+          selectedHours = [hour];
+        }
+      } else {
+        if (selectedHours.contains(hour)) {
+          selectedHours.remove(hour);
+        } else {
+          selectedHours.add(hour);
         }
       }
     });
@@ -68,7 +82,7 @@ class _BarbershopHoursGridState extends State<BarbershopHoursGrid> {
               HourButton(
                 hour: '${i.toString().padLeft(2, '0')}:00',
                 value: i,
-                hourSelected: lastSelection,
+                hourSelected: selectedHours,
                 singleSelection: singleSelection,
                 onHourPressed: handleHourPressed,
                 enabledHours: enabledHours,
@@ -86,7 +100,7 @@ class HourButton extends StatefulWidget {
   final List<int>? enabledHours;
   final ValueChanged<int> onHourPressed;
   final bool singleSelection;
-  final int? hourSelected;
+  final List<int> hourSelected;
 
   const HourButton({
     super.key,
@@ -104,7 +118,7 @@ class HourButton extends StatefulWidget {
 
 class _HourButtonState extends State<HourButton> {
   // var selected = false;
-  bool get selected => widget.hourSelected == widget.value;
+  bool get selected => widget.hourSelected.contains(widget.value);
   @override
   Widget build(BuildContext context) {
     final HourButton(
@@ -126,7 +140,9 @@ class _HourButtonState extends State<HourButton> {
 
     return InkWell(
       onTap: () {
-        disabledHour ? null : onHourPressed(widget.value);
+        if (!disabledHour) {
+          onHourPressed(widget.value);
+        }
       },
       borderRadius: BorderRadius.circular(8),
       child: Container(
