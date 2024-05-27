@@ -11,9 +11,13 @@ import 'package:dw_barbershop/src/features/register/user/user_register_page.dart
 import 'package:dw_barbershop/src/features/schedule/schedule_client_page.dart';
 import 'package:dw_barbershop/src/features/splash/splash_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class BarbershopApp extends StatelessWidget {
   const BarbershopApp({super.key});
+
+  final String _languageCode = 'pt';
+  final String _countryCode = 'BR';
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +39,13 @@ class BarbershopApp extends StatelessWidget {
             '/employee/schedule': (_) => const EmployeeSchedulePage(),
             '/schedule': (_) => const ScheduleClientPage(),
           },
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: [Locale(_languageCode, _countryCode)],
+          locale: Locale(_languageCode, _countryCode),
         );
       },
     );
