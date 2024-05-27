@@ -53,7 +53,6 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
           });
 
       final schedules = data.map((json) {
-        print("🚀 ~ ScheduleRepositoryImpl ~ finalschedules=data.map ~ $json");
         return ScheduleModel.fromMap(json);
       }).toList();
 
